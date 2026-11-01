@@ -21,7 +21,7 @@ jobs:
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           KEYWORDS_SPREADSHEET_ID: ${{ secrets.KEYWORDS_SPREADSHEET_ID }}
-          KEYWORDS_SHEET_NAME: ${{ secrets.KEYWORDS_SHEET_NAME }}
+          KEYWORDS_SHEET_NAME: Keywords
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-          JOBS_TABLE_NAME: ${{ secrets.JOBS_TABLE_NAME }}
+          JOBS_TABLE_NAME: jobs
