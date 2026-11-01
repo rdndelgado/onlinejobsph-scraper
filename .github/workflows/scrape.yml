@@ -1,0 +1,27 @@
+name: scrape
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+
+      - run: python3 main.py
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          KEYWORDS_SPREADSHEET_ID: ${{ secrets.KEYWORDS_SPREADSHEET_ID }}
+          KEYWORDS_SHEET_NAME: ${{ secrets.KEYWORDS_SHEET_NAME }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          JOBS_TABLE_NAME: ${{ secrets.JOBS_TABLE_NAME }}

@@ -2,7 +2,7 @@
 
 Scheduled job that searches [onlinejobs.ph](https://www.onlinejobs.ph) for a set of keywords and stores parsed job details in Supabase.
 
-Runs as a Render Cron Job, every 12 hours. No web server, no public API — see `architecture.md` for details.
+Runs as a scheduled GitHub Actions workflow, every 12 hours. No web server, no public API — see `architecture.md` for details.
 
 ## How it works
 
@@ -72,4 +72,4 @@ python3 main.py
 
 ## Deploy
 
-`render.yaml` defines a Render Cron Job (`schedule: "0 */12 * * *"`, every 12 hours). Connect this repo on Render, it picks up `render.yaml` automatically — set the environment variables above in Render's dashboard (`.env` itself isn't committed).
+`.github/workflows/scrape.yml` defines the schedule (`cron: "0 */12 * * *"`, every 12 hours) plus a manual `workflow_dispatch` trigger. Push this repo to GitHub, then set each environment variable above as a repo secret (Settings → Secrets and variables → Actions) under the same names — the workflow reads them from `secrets.*`.

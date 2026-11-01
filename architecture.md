@@ -2,12 +2,12 @@
 
 ## Overview
 
-One process (`main.py`), triggered by a Render Cron Job every 12 hours. No API, no persistent server — the container runs, does its work, exits.
+One process (`main.py`), triggered by a scheduled GitHub Actions workflow every 12 hours. No API, no persistent server — the runner checks out the repo, does its work, exits.
 
 ```mermaid
 flowchart TD
     subgraph Trigger
-        CRON["Render Cron Job\n(every 12h, render.yaml)"]
+        CRON["GitHub Actions schedule\n(every 12h, .github/workflows/scrape.yml)"]
     end
 
     CRON --> MAIN["main.py"]
@@ -50,4 +50,5 @@ flowchart TD
 - **Google Sheets kept for keyword input only** — non-technical, editable without a deploy.
 - **5s delay before every request to onlinejobs.ph** — required by its `robots.txt` (`Crawl-delay: 5`), applied uniformly whether it's a search-page request (mapper) or a job-detail-page request (parser).
 - **No headless browser** — onlinejobs.ph is server-rendered; search works via a plain `GET` with a `jobkeyword` query param, and job listings are present in the raw HTML. Plain `requests` + `BeautifulSoup` is enough.
-- **Cron, not an API** — this is an internal data pipeline, not a request-response service, so Render's Cron Job type fits directly: no server to keep warm, no timeout to engineer around. An API wrapper (e.g. for Apify or direct HTTP use) is a separate, later concern — `services/search.py`, `services/fetcher.py`, and `services/parser.py` have no framework dependency, so they're reusable as-is if that happens.
+- **Cron, not an API** — this is an internal data pipeline, not a request-response service, so a scheduled GitHub Actions workflow fits directly: no server to keep warm, no timeout to engineer around, no hosting cost (GitHub Actions' free tier covers this run's minutes easily). An API wrapper (e.g. for Apify or direct HTTP use) is a separate, later concern — `services/search.py`, `services/fetcher.py`, and `services/parser.py` have no framework dependency, so they're reusable as-is if that happens.
+- **GitHub Actions over Render** — Render has no free tier for Cron Jobs (always bills per-minute compute); GitHub Actions' schedule trigger does the same job at no cost for this run volume.
